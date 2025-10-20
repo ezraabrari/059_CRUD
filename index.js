@@ -18,7 +18,7 @@ let mysql = require('mysql2');
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'ComalMelati3',
+  password: 'Ezraabrari13',
   database: 'mahasiswa',
   port: 3308
 });
@@ -43,3 +43,40 @@ app.get('/api/users', (req, res) => {
         res.json(results);
     });
 });
+
+app.post('/api/users', (req, res) => {
+    const { nama, nim, kelas} = req.body;
+
+    if (!nama || !nim || !kelas) {
+        return res.status(400).json({message: 'nama, nim, kelas wajib diisi '});
+    } 
+
+    db.query(
+        'INSERT INTO mahasiswa (nama, nim, kelas) VALUES (?, ?, ?,)',
+        [nama, nim, kelas],
+        (err, result) => {
+            if(err) {
+                console.error(err);
+                return res.status(500).json({ message : 'Database Error'});
+            }
+
+            res.status(201).json({ message:'User created succesfully'})
+        }
+    );
+});
+
+app.put('/api/users/:id' , (res, res)=> {
+    const userID = req.params.id;
+    const {nama, nim, kelas} = req.body;
+    db.query(
+        'UPDATE mahasiswa SET nama = ?, nim = ?, kelas = ?, WHERE id = ?',
+        [nama, nim, kelas, userId],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: 'database error'})
+            }
+            res.json({ message: 'user Updated Succesfully'});
+        }
+    );
+})
