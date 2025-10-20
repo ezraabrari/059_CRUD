@@ -79,4 +79,15 @@ app.put('/api/users/:id' , (res, res)=> {
             res.json({ message: 'user Updated Succesfully'});
         }
     );
-})
+});
+
+app.delete('/api/users/:id', (req, res) => {
+    const userID = req.params.id;
+    db.query('DELETE FROM MAHASISWA WHERE id = ?', [userId], (err, result) => {
+        if(err) {
+            console.error(err);
+            return res.status(500).json({message: 'Database Error'})
+        }
+        res.json({ message: 'User Deleted Succesfully'});
+    });
+});
